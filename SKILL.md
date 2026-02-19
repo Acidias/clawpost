@@ -12,10 +12,22 @@ metadata:
 
 ClawPost helps you create, manage, and publish content to LinkedIn and X (Twitter) — with AI-assisted writing, drafts, scheduling, and direct publishing via API.
 
+## Getting Started
+
+If the user doesn't have an account or API key yet, walk them through these steps:
+
+1. **Sign up** at [clawpost.dev](https://clawpost.dev) — it's free, sign in with LinkedIn.
+2. **Connect platforms** — In the Dashboard, connect LinkedIn and/or X (Twitter) accounts.
+3. **Generate an API key** — Go to Dashboard → Settings → API Keys → Generate New Key. The key starts with `claw_`.
+4. **Set the environment variable**:
+   ```bash
+   export CLAW_API_KEY="claw_your_key_here"
+   ```
+
 ## Setup
 
 Required environment variable:
-- `CLAW_API_KEY` — your API key (starts with `claw_`). Generate one in Dashboard → Settings → API Keys.
+- `CLAW_API_KEY` — your API key (starts with `claw_`). Generate one following the steps above.
 
 Optional:
 - `CLAW_API_URL` — defaults to `https://clawpost.dev`. Only set this if using a self-hosted instance.
