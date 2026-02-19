@@ -2,10 +2,7 @@
 name: clawpost
 description: AI-powered social media publishing for LinkedIn and X (Twitter) with algorithm optimization and scheduling.
 homepage: https://clawpost.dev
-metadata:
-  {
-    "openclaw": { "emoji": "📱", "requires": { "bins": ["curl", "node"], "env": ["CLAW_API_KEY"] } }
-  }
+metadata: { "openclaw": { "emoji": "📱", "requires": { "bins": ["curl"], "env": ["CLAW_API_KEY"] } } }
 ---
 
 # Social Media Publisher Skill
