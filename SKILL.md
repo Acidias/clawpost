@@ -1,7 +1,7 @@
 ---
 name: clawpost
 description: AI-powered social media publishing for LinkedIn and X (Twitter) with algorithm optimization and scheduling.
-version: 0.1.0
+version: 0.1.1
 metadata:
   openclaw:
     emoji: "📱"
@@ -48,12 +48,25 @@ Every request needs the header:
 Authorization: Bearer {{CLAW_API_KEY}}
 ```
 
+## Important: Passing JSON in shell commands
+
+When sending JSON data with curl, **always use a heredoc** to avoid shell escaping issues with quotes and special characters:
+```bash
+curl -s -X POST URL \
+  -H "Authorization: Bearer {{CLAW_API_KEY}}" \
+  -H "Content-Type: application/json" \
+  -d @- <<'EOF'
+{"key": "value"}
+EOF
+```
+All examples below use this pattern. Do **not** use `-d '{...}'` with single quotes — it breaks when content contains quotes, newlines, or special characters.
+
 ## Response Format
 
 All responses follow this shape:
 ```json
 {
-  "success": true/false,
+  "success": true,
   "message": "Human-readable summary",
   "data": { ... },
   "error": { "code": "ERROR_CODE", "details": "..." }
@@ -102,7 +115,9 @@ Each post includes an `availableActions` array (e.g., `["publish", "schedule", "
 curl -s -X POST {{CLAW_API_URL}}/api/claw/v1/drafts \
   -H "Authorization: Bearer {{CLAW_API_KEY}}" \
   -H "Content-Type: application/json" \
-  -d '{"content": "Your post text here", "platform": "linkedin"}'
+  -d @- <<'EOF'
+{"content": "Your post text here", "platform": "linkedin"}
+EOF
 ```
 Platform: `"linkedin"` or `"twitter"`. Twitter content must be ≤ 280 characters.
 
@@ -111,7 +126,9 @@ Platform: `"linkedin"` or `"twitter"`. Twitter content must be ≤ 280 character
 curl -s -X PUT {{CLAW_API_URL}}/api/claw/v1/posts/POST_ID \
   -H "Authorization: Bearer {{CLAW_API_KEY}}" \
   -H "Content-Type: application/json" \
-  -d '{"content": "Updated post text"}'
+  -d @- <<'EOF'
+{"content": "Updated post text"}
+EOF
 ```
 
 ### Delete a Draft
@@ -131,7 +148,9 @@ curl -s -X POST {{CLAW_API_URL}}/api/claw/v1/posts/POST_ID/publish \
 curl -s -X POST {{CLAW_API_URL}}/api/claw/v1/publish \
   -H "Authorization: Bearer {{CLAW_API_KEY}}" \
   -H "Content-Type: application/json" \
-  -d '{"content": "Publishing this directly!", "platform": "linkedin"}'
+  -d @- <<'EOF'
+{"content": "Publishing this directly!", "platform": "linkedin"}
+EOF
 ```
 
 ### Schedule a Draft
@@ -139,7 +158,9 @@ curl -s -X POST {{CLAW_API_URL}}/api/claw/v1/publish \
 curl -s -X POST {{CLAW_API_URL}}/api/claw/v1/posts/POST_ID/schedule \
   -H "Authorization: Bearer {{CLAW_API_KEY}}" \
   -H "Content-Type: application/json" \
-  -d '{"scheduledAt": "2026-06-15T10:00:00Z"}'
+  -d @- <<'EOF'
+{"scheduledAt": "2026-06-15T10:00:00Z"}
+EOF
 ```
 
 ### Direct Schedule (No Draft Step)
@@ -147,7 +168,9 @@ curl -s -X POST {{CLAW_API_URL}}/api/claw/v1/posts/POST_ID/schedule \
 curl -s -X POST {{CLAW_API_URL}}/api/claw/v1/schedule \
   -H "Authorization: Bearer {{CLAW_API_KEY}}" \
   -H "Content-Type: application/json" \
-  -d '{"content": "Scheduled post!", "platform": "linkedin", "scheduledAt": "2026-06-15T10:00:00Z"}'
+  -d @- <<'EOF'
+{"content": "Scheduled post!", "platform": "linkedin", "scheduledAt": "2026-06-15T10:00:00Z"}
+EOF
 ```
 
 ### AI Generate Post
@@ -156,7 +179,9 @@ Let AI write a post based on your prompt. Optional: `tone` and `platform`.
 curl -s -X POST {{CLAW_API_URL}}/api/claw/v1/ai/generate \
   -H "Authorization: Bearer {{CLAW_API_KEY}}" \
   -H "Content-Type: application/json" \
-  -d '{"prompt": "Write about the importance of code reviews", "platform": "linkedin"}'
+  -d @- <<'EOF'
+{"prompt": "Write about the importance of code reviews", "platform": "linkedin"}
+EOF
 ```
 
 ### AI Refine Post
@@ -165,7 +190,9 @@ Improve existing content with instructions.
 curl -s -X POST {{CLAW_API_URL}}/api/claw/v1/ai/refine \
   -H "Authorization: Bearer {{CLAW_API_KEY}}" \
   -H "Content-Type: application/json" \
-  -d '{"content": "Original post text...", "instructions": "Make it shorter and punchier", "platform": "linkedin"}'
+  -d @- <<'EOF'
+{"content": "Original post text...", "instructions": "Make it shorter and punchier", "platform": "linkedin"}
+EOF
 ```
 
 ## Workflow Tips
