@@ -1,0 +1,36 @@
+{
+  "name": "social-media-publisher",
+  "version": "1.0.0",
+  "description": "OpenClaw skill for publishing to LinkedIn and X (Twitter) via ClawPost API",
+  "main": "cli.js",
+  "bin": {
+    "social-publisher": "./cli.js",
+    "clawpost": "./cli.js"
+  },
+  "scripts": {
+    "test": "node cli.js status",
+    "help": "node cli.js help"
+  },
+  "keywords": [
+    "openclaw",
+    "social-media",
+    "linkedin",
+    "twitter",
+    "x",
+    "posting",
+    "automation",
+    "ai",
+    "content"
+  ],
+  "author": "Mihaly Dani <dmisi98@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Acidias/clawpost"
+  },
+  "homepage": "https://clawpost.dev",
+  "preferGlobal": true
+}
