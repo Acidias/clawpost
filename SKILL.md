@@ -1,7 +1,7 @@
 ---
 name: clawpost
 description: AI-powered social media publishing for LinkedIn and X (Twitter) with algorithm optimization and scheduling.
-version: 0.1.1
+version: 0.1.2
 metadata:
   openclaw:
     emoji: "📱"
@@ -103,12 +103,49 @@ curl -s "{{CLAW_API_URL}}/api/claw/v1/posts?status=draft&platform=linkedin&limit
   -H "Authorization: Bearer {{CLAW_API_KEY}}"
 ```
 
+### X Post History
+Retrieve your X (Twitter) post history from the cached profile data. This is a read-only endpoint - no credits are used.
+
+Query parameters:
+- `type` - `posts`, `replies`, or `all` (default: `all`)
+- `limit` - max results, 1-100 (default: `20`)
+- `period` - `7d`, `30d`, `90d`, or `all` (default: `all`)
+
+```bash
+curl -s "{{CLAW_API_URL}}/api/claw/v1/history/x?type=posts&period=30d&limit=10" \
+  -H "Authorization: Bearer {{CLAW_API_KEY}}"
+```
+
+The response includes a `summary` object with aggregated metrics (`totalPosts`, `totalReplies`, `totalLikes`, `totalRetweets`, `totalRepliesReceived`, `totalImpressions`, `topPost`) and a `posts` array with individual tweet details, metrics, media, and reply context.
+
 ### Get Single Post
 ```bash
 curl -s {{CLAW_API_URL}}/api/claw/v1/posts/POST_ID \
   -H "Authorization: Bearer {{CLAW_API_KEY}}"
 ```
 Each post includes an `availableActions` array (e.g., `["publish", "schedule", "update", "delete"]`).
+
+#### Post Object Fields
+
+Every post includes a `postType` field:
+- `"original"` — a regular post composed by the user
+- `"quote"` — a quote tweet of another post (X only)
+- `"reply"` — a reply to another post (X only)
+- `"remix"` — an original tweet inspired by another post (X only)
+
+When `postType` is `"quote"`, `"reply"`, or `"remix"`, the post also includes a `reference` object with the original tweet's context:
+```json
+{
+  "postType": "quote",
+  "content": "User's commentary text",
+  "reference": {
+    "tweetId": "1234567890",
+    "text": "The original tweet text that was quoted",
+    "author": "originalAuthor"
+  }
+}
+```
+This lets you see exactly what was quoted/replied to alongside the user's own text.
 
 ### Create a Draft
 ```bash
